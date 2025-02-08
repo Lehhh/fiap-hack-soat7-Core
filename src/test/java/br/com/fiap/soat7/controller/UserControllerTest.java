@@ -139,12 +139,12 @@ class UserControllerTest {
     }
 
     @Test
-    void recoverPassword_ShouldContainResetLink() {
+    void resetPassword_ShouldContainResetLink() {
         // Arrange
         String username = "test@example.com";
 
         // Act
-        String viewName = userController.forgotPassword(username, new ExtendedModelMap());
+        String viewName = userController.resetPassword(username, new ExtendedModelMap());
 
         // Assert
         assertEquals("user/recover-password", viewName);

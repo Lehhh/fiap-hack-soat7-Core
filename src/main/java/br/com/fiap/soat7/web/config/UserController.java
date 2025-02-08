@@ -55,13 +55,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/recover-password")
-    public String forgotPassword(String username, Model model) {
+    @GetMapping("/reset-password")
+    public String resetPassword(String username, Model model) {
         if (!StringUtil.isNullOrEmpty(username)) {
             userService.resetPassword(username);
             model.addAttribute("message",  UserService.DEFAULT_PASSWORD);
         }
-        return "user/recover-password";
+        return "user/reset-password";
     }
 
 }
