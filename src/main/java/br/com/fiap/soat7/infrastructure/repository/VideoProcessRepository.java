@@ -1,6 +1,5 @@
 package br.com.fiap.soat7.infrastructure.repository;
 
-import br.com.fiap.soat7.domain.User;
 import br.com.fiap.soat7.domain.VideoProcess;
 import br.com.fiap.soat7.domain.enums.Stage;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -7,7 +7,6 @@ import br.com.fiap.soat7.infrastructure.repository.RoleRepository;
 import br.com.fiap.soat7.infrastructure.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +33,7 @@ public class UserService {
 		});
 	}
 	public User createUser(User user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}
 }
