@@ -18,6 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +50,7 @@ class UserServiceTest {
         User createdUser = userService.createUser(user);
 
         // Assert
-        Mockito.verify(userRepository, Mockito.times(1)).save(any(User.class));
+        verify(userRepository, Mockito.times(1)).save(any(User.class));
         assertEquals("encodedPassword", createdUser.getPassword());
     }
 
@@ -74,7 +75,7 @@ class UserServiceTest {
         userService.createAdminIfNotExist();
 
         // Verifica se o admin foi criado
-        Mockito.verify(userRepository, Mockito.times(1)).save(any(User.class));
+        verify(userRepository, Mockito.times(1)).save(any(User.class));
     }
 
 
@@ -102,4 +103,52 @@ class UserServiceTest {
             assertEquals("Erro ao criar usuário", e.getMessage());
         }
     }
+
+    @Test
+    void testResetPassword_UserExists() {
+        // Arrange
+        String userEmail = "existing_user@example.com";
+        User existingUser = new User(userEmail, "oldPassword", new Role("USER"));
+        when(userRepository.findByEmail(userEmail)).thenReturn(Optional.of(existingUser));
+        when(bCryptPasswordEncoder.encode(existingUser.getPassword())).thenReturn("encodedPassword");
+        Role userRole = new Role("USER");
+        when(roleRepository.findByName("USER")).thenReturn(userRole);
+        when(userRepository.save(existingUser)).thenReturn(existingUser);
+
+        // Act
+        User result = userService.resetPassword(userEmail);
+
+        // Assert
+        assertEquals(existingUser, result);
+        assertEquals("encodedPassword", result.getPassword());
+        assertEquals(userRole, result.getRole());
+        verify(userRepository).findByEmail(userEmail);
+        verify(roleRepository).findByName("USER");
+        verify(userRepository).save(existingUser);
+    }
+
+    @Test
+    void testResetPassword_UserDoesNotExist() {
+        // Arrange
+        String userEmail = "new_user@example.com";
+        when(userRepository.findByEmail(userEmail)).thenReturn(Optional.empty());
+        when(bCryptPasswordEncoder.encode(UserService.DEFAULT_PASSWORD)).thenReturn("encodedPassword");
+        Role userRole = new Role("USER");
+        when(roleRepository.findByName("USER")).thenReturn(userRole);
+        User newUser = new User(userEmail, "encodedPassword", userRole);
+        when(userRepository.save(any(User.class))).thenReturn(newUser);
+
+        // Act
+        User result = userService.resetPassword(userEmail);
+
+        // Assert
+        assertEquals(newUser, result);
+        assertEquals("encodedPassword", result.getPassword());
+        assertEquals(userRole, result.getRole());
+        verify(userRepository).findByEmail(userEmail);
+        verify(bCryptPasswordEncoder).encode(UserService.DEFAULT_PASSWORD);
+        verify(roleRepository).findByName("USER");
+        verify(userRepository).save(any(User.class));
+    }
+
 }

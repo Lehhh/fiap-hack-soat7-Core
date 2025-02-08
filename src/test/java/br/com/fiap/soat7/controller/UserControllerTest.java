@@ -12,6 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ExtendedModelMap;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -72,5 +75,79 @@ class UserControllerTest {
 
         // Falha o teste se nenhuma exception for lançada
         // fail("Expected RuntimeException was not thrown");
+    }
+
+
+    @Test
+    void listUsers_ShouldReturnListOfUsers() {
+        // Arrange
+        List<User> users = List.of(new User(), new User());
+        when(userService.findAllUsers()).thenReturn(users);
+
+        // Act
+        ResponseEntity<List<User>> response = userController.listUsers();
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(users, response.getBody());
+        verify(userService).findAllUsers();
+    }
+
+    @Test
+    void getUserDetails_ShouldReturnUserDetails() {
+        // Arrange
+        Long userId = 1L;
+        when(userService.findUserById(userId)).thenReturn(user);
+
+        // Act
+        ResponseEntity<User> response = userController.getUserDetails(userId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(user, response.getBody());
+        verify(userService).findUserById(userId);
+    }
+
+    @Test
+    void updateUser_ShouldUpdateAndReturnUpdatedUser() {
+        // Arrange
+        Long userId = 1L;
+        User updatedUser = new User();
+        updatedUser.setEmail("updated@example.com");
+        when(userService.updateUser(userId, user)).thenReturn(updatedUser);
+
+        // Act
+        ResponseEntity<User> response = userController.updateUser(userId, user);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(updatedUser, response.getBody());
+        verify(userService).updateUser(userId, user);
+    }
+
+    @Test
+    void deleteUser_ShouldDeleteUser() {
+        // Arrange
+        Long userId = 1L;
+
+        // Act
+        ResponseEntity<Void> response = userController.deleteUser(userId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(userService).deleteUserById(userId);
+    }
+
+    @Test
+    void recoverPassword_ShouldContainResetLink() {
+        // Arrange
+        String username = "test@example.com";
+
+        // Act
+        String viewName = userController.forgotPassword(username, new ExtendedModelMap());
+
+        // Assert
+        assertEquals("user/recover-password", viewName);
+        verify(userService).resetPassword(username);
     }
 }
