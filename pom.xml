@@ -20,9 +20,6 @@
 	<developers>
 		<developer/>
 	</developers>
-	<build>
-		<finalName>app</finalName>
-	</build>
 	<scm>
 		<connection/>
 		<developerConnection/>
@@ -68,7 +65,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
+			<version>42.7.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -106,12 +103,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>2.3.232</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -133,6 +124,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<finalName>app</finalName>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

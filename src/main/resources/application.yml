@@ -4,21 +4,26 @@ spring:
       max-file-size: 400MB
       max-request-size: 400MB
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    url: jdbc:postgresql://${POSTGRES_SERVICE}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
 br.com.fiap.soat7:
-  redis-mid-url: ${REDIS_MID_URL}
+  redis-mid-url: ${REDIS_MID_URL}/redis-message/
   upload:
     dir: ${SHARED_DISK}/%s/%s/%s/
 server:
