@@ -7,7 +7,6 @@ import br.com.fiap.soat7.infrastructure.repository.RoleRepository;
 import br.com.fiap.soat7.infrastructure.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
+	public static final String DEFAULT_PASSWORD = "1234";
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -34,6 +34,38 @@ public class UserService {
 		});
 	}
 	public User createUser(User user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		return userRepository.save(user);
+	}
+
+	public User findUserById(Long id) {
+		return userRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+	}
+
+	public void deleteUserById(Long id) {
+		userRepository.deleteById(id);
+	}
+
+	public List<User> findAllUsers() {
+		return userRepository.findAll();
+	}
+
+	public User updateUser(Long id, User updatedUser) {
+		User existingUser = userRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+		existingUser.setEmail(updatedUser.getEmail());
+		existingUser.setPassword(bCryptPasswordEncoder.encode(updatedUser.getPassword()));
+		existingUser.setRole(updatedUser.getRole());
+		return userRepository.save(existingUser);
+	}
+
+	public User resetPassword(String email) {
+
+		User user = userRepository.findByEmail(email)
+				.orElse(new User(email, DEFAULT_PASSWORD, null));
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		user.setRole(roleRepository.findByName("USER"));
 		return userRepository.save(user);
 	}
 }
