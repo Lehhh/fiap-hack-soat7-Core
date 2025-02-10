@@ -44,7 +44,7 @@ jobs:
         run: kubectl create namespace ${{ secrets.NAMESPACE }} || true
 
       - name: Build Docker image
-        run: docker build -t $${{ vars.ECR_REPOSITORY_URL }}${{ vars.IMAGE_CORE }}:1.0.0 .
+        run: docker build -t ${{ vars.ECR_REPOSITORY_URL }}${{ vars.IMAGE_CORE }}:1.0.0 .
 
       - name: Push Docker image to ECR
         run: docker push ${{ vars.ECR_REPOSITORY_URL }}${{ vars.IMAGE_CORE }}:1.0.0
