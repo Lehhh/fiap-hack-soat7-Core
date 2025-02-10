@@ -44,6 +44,8 @@ jobs:
 
       - name: Apply Kubernetes deployment
         working-directory: .kube/app
+        env:
+          IMAGE_CORE: ${{ vars.ECR_REPOSITORY_URL }}${{ vars.IMAGE_CORE }}:1.0.0
         run: kubectl apply -f app-deployment.yaml --namespace ${{ secrets.NAMESPACE }} || true
 
       - name: Build Docker image
