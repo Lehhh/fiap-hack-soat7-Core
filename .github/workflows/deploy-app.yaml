@@ -42,10 +42,12 @@ jobs:
       - name: Create Kubernetes namespace
         run: kubectl create namespace ${{ secrets.NAMESPACE }} || true
 
+      - name: Replace image placeholder
+        run: sed -i 's|IMAGE_CORE_PLACEHOLDER|${{ vars.ECR_REPOSITORY_URL }}${{ vars.IMAGE_CORE }}:1.0.0|g' .kube/app/app-deployment.yaml
+
+
       - name: Apply Kubernetes deployment
         working-directory: .kube/app
-        env:
-          IMAGE_CORE: ${{ vars.ECR_REPOSITORY_URL }}${{ vars.IMAGE_CORE }}:1.0.0
         run: kubectl apply -f app-deployment.yaml --namespace ${{ secrets.NAMESPACE }} || true
 
       - name: Build Docker image
