@@ -3,7 +3,7 @@ package br.com.fiap.soat7.controller;
 import br.com.fiap.soat7.application.service.UserService;
 import br.com.fiap.soat7.domain.User;
 import br.com.fiap.soat7.infrastructure.security.JwtUtil;
-import br.com.fiap.soat7.web.config.UserController;
+import br.com.fiap.soat7.web.restcontroller.UserController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -147,7 +147,7 @@ class UserControllerTest {
         String viewName = userController.resetPassword(username, new ExtendedModelMap());
 
         // Assert
-        assertEquals("user/recover-password", viewName);
+        assertEquals("user/reset-password", viewName);
         verify(userService).resetPassword(username);
     }
 }

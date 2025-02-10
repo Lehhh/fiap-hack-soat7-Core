@@ -4,7 +4,7 @@ import br.com.fiap.soat7.application.service.UpdateStatusService;
 import br.com.fiap.soat7.domain.dto.StatusRequestUpdate;
 import br.com.fiap.soat7.domain.enums.Stage;
 import br.com.fiap.soat7.infrastructure.configuration.TextReponse;
-import br.com.fiap.soat7.web.config.UpdateStatusController;
+import br.com.fiap.soat7.web.restcontroller.UpdateStatusController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

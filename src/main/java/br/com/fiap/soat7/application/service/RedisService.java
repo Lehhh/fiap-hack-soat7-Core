@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
+import static br.com.fiap.soat7.infrastructure.configuration.TextReponse.ID;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -31,7 +33,7 @@ public class RedisService {
 					new HttpEntity<>(infoVideo),
 					String.class);
 			log.info(exchange.getBody());
-			return true;
+			return exchange.getStatusCode().is2xxSuccessful();
 		}
 		catch (Exception e){
 			log.error(e.getMessage());
@@ -43,12 +45,12 @@ public class RedisService {
 		try{
 			ResponseEntity<String> exchange = restTemplate.exchange(props.getRedisMidUrl() + statusRequest.getEndPoint(),
 					HttpMethod.DELETE,
-					new HttpEntity<>(Map.of("id", id)),
+					new HttpEntity<>(Map.of(ID, id)),
 					String.class);
-			return true;
+			return exchange.getStatusCode().is2xxSuccessful();
 		}
 		catch (Exception e){
-			e.getMessage();
+			log.error(e.getMessage());
 			return false;
 		}
 	}

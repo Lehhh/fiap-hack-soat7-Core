@@ -1,4 +1,4 @@
-package br.com.fiap.soat7.web.config;
+package br.com.fiap.soat7.web.controller;
 
 import br.com.fiap.soat7.application.service.UploadService;
 import br.com.fiap.soat7.domain.User;
@@ -20,24 +20,10 @@ import java.io.IOException;
 import java.util.Map;
 
 @Controller
-@RequiredArgsConstructor
 public class VideoController {
-
-	private final UploadService uploadService;
-	private final UserRepository userRepository;
-
 	@GetMapping("/upload")
 	public String showUploadForm(Model model) {
 		return "upload";
 	}
 
-	@PostMapping("/upload")
-	@ResponseBody
-	public ResponseEntity<Map<String, String>> handleFileUpload(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
-		User user = userRepository.findByEmail(userDetails.getUsername()).get();
-		String uploadResponse = uploadService.uploadFile(file, user);
-		return uploadResponse.contains(TextReponse.SUCCESS) ?
-				ResponseEntity.ok().body(Map.of(TextReponse.MESSAGE, uploadResponse)) :
-				ResponseEntity.internalServerError().body(Map.of(TextReponse.MESSAGE, uploadResponse));
-	}
 }

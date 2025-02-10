@@ -4,7 +4,8 @@ import br.com.fiap.soat7.application.service.UploadService;
 import br.com.fiap.soat7.domain.User;
 import br.com.fiap.soat7.infrastructure.configuration.TextReponse;
 import br.com.fiap.soat7.infrastructure.repository.UserRepository;
-import br.com.fiap.soat7.web.config.VideoController;
+import br.com.fiap.soat7.web.controller.VideoController;
+import br.com.fiap.soat7.web.restcontroller.UploadController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +42,9 @@ class VideoControllerTest {
     @InjectMocks
     private VideoController videoController;
 
+    @InjectMocks
+    private UploadController uploadController;
+
     private User user;
     private UserDetails userDetails;
     private MultipartFile file;
@@ -73,7 +77,7 @@ class VideoControllerTest {
         when(uploadService.uploadFile(file, user)).thenReturn(successMessage);
 
         // Act
-        ResponseEntity<Map<String, String>> response = videoController.handleFileUpload(file, userDetails);
+        ResponseEntity<Map<String, String>> response = uploadController.handleFileUpload(file, userDetails);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -89,7 +93,7 @@ class VideoControllerTest {
         when(uploadService.uploadFile(file, user)).thenReturn(errorMessage);
 
         // Act
-        ResponseEntity<Map<String, String>> response = videoController.handleFileUpload(file, userDetails);
+        ResponseEntity<Map<String, String>> response = uploadController.handleFileUpload(file, userDetails);
 
         // Assert
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
