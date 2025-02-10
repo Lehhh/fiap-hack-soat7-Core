@@ -1,6 +1,6 @@
 package br.com.fiap.soat7.controller;
 
-import br.com.fiap.soat7.web.config.HomeController;
+import br.com.fiap.soat7.web.controller.HomeController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

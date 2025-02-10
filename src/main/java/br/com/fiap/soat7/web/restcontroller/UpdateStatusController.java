@@ -1,4 +1,4 @@
-package br.com.fiap.soat7.web.config;
+package br.com.fiap.soat7.web.restcontroller;
 
 import br.com.fiap.soat7.application.service.UpdateStatusService;
 import br.com.fiap.soat7.domain.dto.StatusRequestUpdate;

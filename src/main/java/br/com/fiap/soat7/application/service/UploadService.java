@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Optional;
 
+import static br.com.fiap.soat7.infrastructure.configuration.TextReponse.UPLOAD_DISK_ERROR_FAIL_UPLOAD;
+
 @Service
 @RequiredArgsConstructor
 public class UploadService {
@@ -34,7 +36,7 @@ public class UploadService {
 			return uploadResponse;
 		}
 		catch (Exception e ){
-			throw new IOException("Erro ao realizar Upload: " + e.getMessage());
+			throw new IOException(String.format(UPLOAD_DISK_ERROR_FAIL_UPLOAD + e.getMessage()));
 		}
 	}
 

@@ -1,4 +1,4 @@
-package br.com.fiap.soat7.web.config;
+package br.com.fiap.soat7.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

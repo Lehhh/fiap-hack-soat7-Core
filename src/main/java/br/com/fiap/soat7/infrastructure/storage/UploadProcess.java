@@ -9,6 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
+import static br.com.fiap.soat7.infrastructure.configuration.TextReponse.DIRECTORY_CREATED;
+import static br.com.fiap.soat7.infrastructure.configuration.TextReponse.DIRECTORY_ERROR_CREATE;
+
 @Component
 @Log4j2
 public class UploadProcess {
@@ -28,9 +31,9 @@ public class UploadProcess {
 			File directory = new File(finalPath);
 			if (!directory.exists()) {
 				if (directory.mkdirs()) {
-					log.info("Diretório criado: " + directory.getAbsolutePath());
+					log.info(DIRECTORY_CREATED + directory.getAbsolutePath());
 				} else {
-					log.error("Falha ao criar o diretório: " + directory.getAbsolutePath());
+					log.error(DIRECTORY_ERROR_CREATE + directory.getAbsolutePath());
 					return TextReponse.UPLOAD_DISK_ERROR_FAIL_CREATE_DIRECTORY;
 				}
 			}
