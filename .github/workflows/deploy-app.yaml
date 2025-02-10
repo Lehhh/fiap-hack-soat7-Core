@@ -33,7 +33,7 @@ jobs:
       - name: Login to Amazon ECR
         run: |
           aws ecr get-login-password --region us-east-1 || \
-          docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_URL }}
+          docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_URL }}/$(echo ${{ secrets.IMAGE_CORE }})
 
       - name: Create ECR repository
         run: |
