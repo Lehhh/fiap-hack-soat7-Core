@@ -223,6 +223,11 @@
 						</goals>
 						<configuration>
 							<excludes>
+								<exclude>**/test/**</exclude>
+								<exclude>**/tests/**</exclude>
+								<exclude>**/*Test.java</exclude>
+								<exclude>**/*Tests.java</exclude>
+								<exclude>**/*$*.class</exclude>
 							</excludes>
 						</configuration>
 					</execution>
