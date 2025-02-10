@@ -42,6 +42,10 @@ jobs:
       - name: Create Kubernetes namespace
         run: kubectl create namespace ${{ secrets.NAMESPACE }} || true
 
+      - name: Apply Kubernetes deployment
+        working-directory: .kube/app
+        run: kubectl apply -f app-deployment.yaml --namespace ${{ secrets.NAMESPACE }} || true
+
       - name: Build Docker image
         run: docker build -t ${{ vars.ECR_REPOSITORY_URL }}${{ vars.IMAGE_CORE }}:1.0.0 .
 
