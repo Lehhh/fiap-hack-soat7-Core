@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static br.com.fiap.soat7.infrastructure.configuration.TextReponse.USER_ID_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -40,7 +42,7 @@ public class UserService {
 
 	public User findUserById(Long id) {
 		return userRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+				.orElseThrow(() -> new IllegalArgumentException(String.format(USER_ID_NOT_FOUND, id)));
 	}
 
 	public void deleteUserById(Long id) {
@@ -53,7 +55,7 @@ public class UserService {
 
 	public User updateUser(Long id, User updatedUser) {
 		User existingUser = userRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+				.orElseThrow(() -> new IllegalArgumentException(String.format(USER_ID_NOT_FOUND, id)));
 		existingUser.setEmail(updatedUser.getEmail());
 		existingUser.setPassword(bCryptPasswordEncoder.encode(updatedUser.getPassword()));
 		existingUser.setRole(updatedUser.getRole());

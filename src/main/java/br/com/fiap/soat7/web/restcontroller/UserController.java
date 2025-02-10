@@ -1,4 +1,4 @@
-package br.com.fiap.soat7.web.config;
+package br.com.fiap.soat7.web.restcontroller;
 
 import br.com.fiap.soat7.application.service.UserService;
 import br.com.fiap.soat7.domain.User;
@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static br.com.fiap.soat7.infrastructure.configuration.TextReponse.MESSAGE;
 
 @Controller
 @RequestMapping("/users")
@@ -59,7 +61,7 @@ public class UserController {
     public String resetPassword(String username, Model model) {
         if (!StringUtil.isNullOrEmpty(username)) {
             userService.resetPassword(username);
-            model.addAttribute("message",  UserService.DEFAULT_PASSWORD);
+            model.addAttribute(MESSAGE,  UserService.DEFAULT_PASSWORD);
         }
         return "user/reset-password";
     }

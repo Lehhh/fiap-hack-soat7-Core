@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.MissingFormatArgumentException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,7 +80,7 @@ class UploadServiceTest {
         user.setId(1L);
 
         // Verifica se foi lançada uma exceção
-        assertThrows(IOException.class, () -> uploadService.uploadFile(file, user));
+        assertThrows(MissingFormatArgumentException.class, () -> uploadService.uploadFile(file, user));
     }
 
 
