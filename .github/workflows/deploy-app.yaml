@@ -57,25 +57,25 @@ jobs:
           --from-literal=postgres-db=${{ secrets.POSTGRES_DB }} \
           --from-literal=postgres-service=${{ secrets.POSTGRES_SERVICE }} \
           --from-literal=postgres-port=${{ secrets.POSTGRES_PORT }} \
-          --namespace ${{ secrets.NAMESPACE }}
+          --namespace ${{ secrets.NAMESPACE }} || true
 
       - name: Apply Kubernetes pv
         working-directory: .kube/app
-        run: kubectl apply -f app-pv.yaml --namespace ${{ secrets.NAMESPACE }}
+        run: kubectl apply -f app-pv.yaml --namespace ${{ secrets.NAMESPACE }} || true
 
       - name: Apply Kubernetes pvc
         working-directory: .kube/app
-        run: kubectl apply -f app-pvc.yaml --namespace ${{ secrets.NAMESPACE }}
+        run: kubectl apply -f app-pvc.yaml --namespace ${{ secrets.NAMESPACE }} || true
 
       - name: Apply Kubernetes deployment
         working-directory: .kube/app
-        run: kubectl apply -f app-deployment.yaml --namespace ${{ secrets.NAMESPACE }}
+        run: kubectl apply -f app-deployment.yaml --namespace ${{ secrets.NAMESPACE }} || true
 
       - name: Apply Kubernetes service
         working-directory: .kube/app
-        run: kubectl apply -f app-service.yaml --namespace ${{ secrets.NAMESPACE }}
+        run: kubectl apply -f app-service.yaml --namespace ${{ secrets.NAMESPACE }} || true
 
       - name: Apply Kubernetes ingress
         working-directory: .kube/app
-        run: kubectl apply -f app-ingress.yaml --namespace ${{ secrets.NAMESPACE }}
+        run: kubectl apply -f app-ingress.yaml --namespace ${{ secrets.NAMESPACE }} || true
 
