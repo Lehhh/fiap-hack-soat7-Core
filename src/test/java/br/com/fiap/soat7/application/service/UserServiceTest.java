@@ -2,8 +2,10 @@ package br.com.fiap.soat7.application.service;
 
 import br.com.fiap.soat7.domain.Role;
 import br.com.fiap.soat7.domain.User;
+import br.com.fiap.soat7.domain.VideoProcess;
 import br.com.fiap.soat7.infrastructure.repository.RoleRepository;
 import br.com.fiap.soat7.infrastructure.repository.UserRepository;
+import br.com.fiap.soat7.infrastructure.repository.VideoProcessRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +14,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +30,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private VideoProcessRepository videoProcessRepository;
 
     @Mock
     private RoleRepository roleRepository;
@@ -62,6 +69,7 @@ class UserServiceTest {
 
         // Configura o mock do RoleRepository
         RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
+        VideoProcessRepository videoProcessRepository = Mockito.mock(VideoProcessRepository.class);
         when(roleRepository.findAll()).thenReturn(List.of(new Role("USER")));
 
         // Configura o mock do BCryptPasswordEncoder
@@ -69,7 +77,7 @@ class UserServiceTest {
         when(bCryptPasswordEncoder.encode(Mockito.anyString())).thenReturn("encodedPassword");
 
         // Cria uma instância da classe UserService
-        UserService userService = new UserService(userRepository, roleRepository, bCryptPasswordEncoder);
+        UserService userService = new UserService(userRepository,videoProcessRepository, roleRepository, bCryptPasswordEncoder);
 
         // Chama o método createAdminIfNotExist
         userService.createAdminIfNotExist();
@@ -88,9 +96,9 @@ class UserServiceTest {
         // Configura o mock do BCryptPasswordEncoder
         BCryptPasswordEncoder bCryptPasswordEncoder = Mockito.mock(BCryptPasswordEncoder.class);
         when(bCryptPasswordEncoder.encode(Mockito.anyString())).thenReturn("encodedPassword");
-
+        VideoProcessRepository videoProcessRepository = Mockito.mock(VideoProcessRepository.class);
         // Cria uma instância da classe UserService
-        UserService userService = new UserService(userRepository, Mockito.mock(RoleRepository.class), bCryptPasswordEncoder);
+        UserService userService = new UserService(userRepository, videoProcessRepository,Mockito.mock(RoleRepository.class), bCryptPasswordEncoder);
 
         // Cria um usuário
         User user = new User("user@example.com", "password", new Role("USER"));
@@ -151,4 +159,58 @@ class UserServiceTest {
         verify(userRepository).save(any(User.class));
     }
 
+    @Test
+    public void getVideoStatusesById_ValidUserId_ReturnsVideoList() {
+        // Arrange
+        Long userId = 1L;
+        User mockUser = new User();
+        mockUser.setId(userId); // Set the user ID
+
+        List<VideoProcess> mockVideoList = new ArrayList<>();
+        mockVideoList.add(new VideoProcess());
+        mockVideoList.add(new VideoProcess());
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
+        when(videoProcessRepository.findByUserId(userId)).thenReturn(mockVideoList);
+
+        // Act
+        List<VideoProcess> result = userService.getVideoStatusesById(userId);
+
+        // Assert
+        assertEquals(mockVideoList, result);
+    }
+
+    @Test
+    public void getVideoStatusesById_UserNotFound_ReturnsEmptyList() {
+        // Arrange
+        Long userId = 2L;
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // Act
+        List<VideoProcess> result = userService.getVideoStatusesById(userId);
+
+        // Assert
+        assertEquals(Collections.emptyList(), result);
+    }
+
+    @Test
+    public void getVideoStatusesById_UserHasNoVideos_ReturnsEmptyList() {
+        // Arrange
+        Long userId = 3L;
+        User mockUser = new User();
+        mockUser.setId(userId);
+
+        List<VideoProcess> emptyVideoList = Collections.emptyList();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
+        when(videoProcessRepository.findByUserId(userId)).thenReturn(emptyVideoList);
+
+        // Act
+        List<VideoProcess> result = userService.getVideoStatusesById(userId);
+
+        // Assert
+        assertEquals(emptyVideoList, result);
+    }
+    
 }

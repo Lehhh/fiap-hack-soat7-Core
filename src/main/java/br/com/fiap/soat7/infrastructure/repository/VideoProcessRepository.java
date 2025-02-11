@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface VideoProcessRepository extends JpaRepository<VideoProcess, Long> {
@@ -32,4 +33,6 @@ public interface VideoProcessRepository extends JpaRepository<VideoProcess, Long
 
 	@Query("SELECT v FROM VideoProcess v WHERE v.name = :name AND v.userId.id = :userId")
 	VideoProcess findByNameAndUserId(@Param("userId") Long userId, @Param("name") String name);
+
+	List<VideoProcess> findByUserId(Long userId);
 }

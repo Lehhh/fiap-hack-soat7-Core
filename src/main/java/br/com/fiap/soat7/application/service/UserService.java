@@ -2,15 +2,19 @@ package br.com.fiap.soat7.application.service;
 
 import br.com.fiap.soat7.domain.Role;
 import br.com.fiap.soat7.domain.User;
+import br.com.fiap.soat7.domain.VideoProcess;
 import br.com.fiap.soat7.domain.enums.RoleNames;
 import br.com.fiap.soat7.infrastructure.repository.RoleRepository;
 import br.com.fiap.soat7.infrastructure.repository.UserRepository;
+import br.com.fiap.soat7.infrastructure.repository.VideoProcessRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static br.com.fiap.soat7.infrastructure.configuration.TextReponse.USER_ID_NOT_FOUND;
 
@@ -20,8 +24,20 @@ public class UserService {
 
 	public static final String DEFAULT_PASSWORD = "1234";
 	private final UserRepository userRepository;
+	private final VideoProcessRepository videoProcessRepository;
 	private final RoleRepository roleRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	public List<VideoProcess> getVideoStatusesById(Long id) {
+		Optional<User> userOptional = userRepository.findById(id);
+
+		if (userOptional.isPresent()) {
+			User user = userOptional.get();
+			return videoProcessRepository.findByUserId(user.getId());
+		} else {
+			return Collections.emptyList();
+		}
+	}
 
 	@PostConstruct
 	public void createAdminIfNotExist() {

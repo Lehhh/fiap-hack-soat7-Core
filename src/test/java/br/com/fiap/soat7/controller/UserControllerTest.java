@@ -2,6 +2,7 @@ package br.com.fiap.soat7.controller;
 
 import br.com.fiap.soat7.application.service.UserService;
 import br.com.fiap.soat7.domain.User;
+import br.com.fiap.soat7.domain.VideoProcess;
 import br.com.fiap.soat7.infrastructure.security.JwtUtil;
 import br.com.fiap.soat7.web.restcontroller.UserController;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ExtendedModelMap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,6 +41,55 @@ class UserControllerTest {
         user = new User();
         user.setEmail("test@example.com");
         user.setPassword("password");
+    }
+
+    @Test
+    public void getVideoStatuses_ValidUserId_ReturnsOkWithVideoList() {
+        // Arrange
+        Long userId = 1L;
+        List<VideoProcess> mockVideoList = new ArrayList<>();
+        mockVideoList.add(new VideoProcess()); // Adicione pelo menos um VideoProcess para o teste
+        mockVideoList.add(new VideoProcess());
+
+        when(userService.getVideoStatusesById(userId)).thenReturn(mockVideoList); // Alterado para UserService
+
+        // Act
+        ResponseEntity<List<VideoProcess>> response = userController.getVideoStatusById(userId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockVideoList, response.getBody());
+    }
+
+    @Test
+    public void getVideoStatuses_NoVideosForUser_ReturnsOkWithEmptyList() {
+        // Arrange
+        Long userId = 2L;
+        List<VideoProcess> mockVideoList = new ArrayList<>(); // Lista vazia
+
+        when(userService.getVideoStatusesById(userId)).thenReturn(mockVideoList); // Alterado para UserService
+
+        // Act
+        ResponseEntity<List<VideoProcess>> response = userController.getVideoStatusById(userId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockVideoList, response.getBody()); // Verifica se a lista retornada está vazia
+    }
+
+    @Test
+    public void getVideoStatuses_UserServiceReturnsNull_ReturnsOkWithNullList() {
+        // Arrange
+        Long userId = 3L;
+
+        when(userService.getVideoStatusesById(userId)).thenReturn(null); // Alterado para UserService
+
+        // Act
+        ResponseEntity<List<VideoProcess>> response = userController.getVideoStatusById(userId);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(null, response.getBody()); // Verifica se retornou null
     }
 
     @Test
