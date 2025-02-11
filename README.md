@@ -4,7 +4,39 @@ Essa app tem como objetivo ser o core da app, a interface inicial do usuario, ta
 
 *Necessário o serviço do Redis Communication estar de pé
 
-# Como inicializar a app
+# Aplicação Core
+
+Essa aplicação serve como o núcleo da app, fornecendo a interface inicial do usuário para autenticação e comunicação com o banco de dados.
+
+## Pré-requisitos
+
+- Docker
+- Kubernetes
+- AWS CLI
+- kubectl
+- GitHub Actions
+
+## Variáveis de Ambiente
+
+As seguintes variáveis de ambiente são necessárias para a aplicação funcionar:
+
+- `REDIS_MID_URL`: URL para o serviço de comunicação Redis.
+- `POSTGRES_USER`: Nome de usuário do banco de dados PostgreSQL.
+- `POSTGRES_PASSWORD`: Senha do banco de dados PostgreSQL.
+- `POSTGRES_DB`: Nome do banco de dados PostgreSQL.
+- `POSTGRES_SERVICE`: Nome do serviço ou endereço IP do banco de dados PostgreSQL.
+- `POSTGRES_PORT`: Número da porta do banco de dados PostgreSQL.
+- `SHARED_DISK`: Caminho para o diretório de disco compartilhado.
+
+## Como Iniciar a Aplicação
+
+### Iniciar o Banco de Dados
+
+#### Usando Docker
+
+```sh
+docker run -d --name postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgrespassword -e POSTGRES_DB=soat7hack -p 5432:5432 postgres:latest
+```
 
 ## Iniciar o Banco
 
