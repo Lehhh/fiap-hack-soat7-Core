@@ -2,6 +2,7 @@ package br.com.fiap.soat7.web.restcontroller;
 
 import br.com.fiap.soat7.application.service.UserService;
 import br.com.fiap.soat7.domain.User;
+import br.com.fiap.soat7.domain.VideoProcess;
 import br.com.fiap.soat7.infrastructure.security.JwtUtil;
 import ch.qos.logback.core.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,4 +67,9 @@ public class UserController {
         return "user/reset-password";
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<VideoProcess>> getVideoStatusById(@PathVariable Long id) {
+        List<VideoProcess> videosStatus = userService.getVideoStatusesById(id);
+        return ResponseEntity.ok(videosStatus);
+    }
 }
