@@ -25,7 +25,6 @@ kubectl apply -f postgres-service.yaml --namespace=hackaton-soat7-2025
 https://github.com/Lehhh/fiap-hack-soat7-terraform-rds.git
 
 
-
 ##Para executar a app no Docker
 
 docker run -d \
@@ -42,4 +41,12 @@ docker run -d \
 -v /opt/app/shared:/opt/app/shared \
 core:1.0.0
 
+------
+Arquitetura:
 
+![alt text](arquitetura.png)
+
+------
+Fluxograma:
+
+![alt text](fluxo.png)
